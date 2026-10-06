@@ -1,0 +1,383 @@
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #f4f6f8;
+
+    color: #222;
+}
+
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+
+    margin: 40px auto;
+}
+
+
+/* HEADER */
+
+header {
+    text-align: center;
+
+    margin-bottom: 30px;
+}
+
+
+header h1 {
+    margin-bottom: 10px;
+
+    font-size: 36px;
+}
+
+
+header p {
+    max-width: 850px;
+
+    margin: auto;
+
+    line-height: 1.6;
+
+    color: #555;
+}
+
+
+/* CARD */
+
+.card {
+    background: white;
+
+    padding: 25px;
+
+    margin-bottom: 25px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+.card h2 {
+    margin-top: 0;
+
+    margin-bottom: 20px;
+}
+
+
+/* FORM */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+
+.form-group label {
+    display: block;
+
+    font-weight: bold;
+
+    margin-bottom: 8px;
+}
+
+
+.form-group small {
+    display: block;
+
+    margin-top: 8px;
+
+    color: #666;
+}
+
+
+input[type="file"] {
+    width: 100%;
+
+    padding: 12px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 6px;
+
+    background: #fafafa;
+}
+
+
+input[type="number"],
+.search-container input {
+    width: 100%;
+
+    padding: 12px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 6px;
+
+    font-size: 15px;
+}
+
+
+/* CHUNK SETTINGS */
+
+.chunk-settings {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+}
+
+
+/* BUTTON */
+
+button {
+    padding: 12px 20px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+button:hover {
+    background: #1d4ed8;
+}
+
+
+button:disabled {
+    background: #999;
+
+    cursor: not-allowed;
+}
+
+
+/* STATUS */
+
+.status {
+    margin-top: 15px;
+
+    padding: 12px;
+
+    border-radius: 6px;
+
+    background: #f1f5f9;
+
+    color: #444;
+}
+
+
+/* SELECTED FILE */
+
+.selected-files {
+    margin-bottom: 20px;
+}
+
+
+.selected-file {
+    padding: 12px;
+
+    margin-bottom: 8px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 6px;
+
+    background: #f8fafc;
+}
+
+
+/* UPLOADED FILES */
+
+.uploaded-file {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 15px;
+
+    margin-bottom: 10px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    background: #fafafa;
+}
+
+
+.uploaded-file-name {
+    flex: 1;
+
+    font-weight: bold;
+}
+
+
+.file-type {
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    background: #e5e7eb;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+
+.file-status {
+    color: #15803d;
+
+    font-weight: bold;
+}
+
+
+/* PROCESSING RESULT */
+
+.processing-result {
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    padding: 15px;
+
+    margin-bottom: 15px;
+}
+
+
+.processing-result h3 {
+    margin-top: 0;
+}
+
+
+.processing-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+}
+
+
+.processing-item {
+    padding: 10px;
+
+    background: #f8fafc;
+
+    border-radius: 6px;
+}
+
+
+/* SEARCH */
+
+.search-container {
+    display: flex;
+
+    gap: 10px;
+}
+
+
+.search-container input {
+    flex: 1;
+}
+
+
+/* SEARCH RESULTS */
+
+.result-item {
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    padding: 18px;
+
+    margin-bottom: 15px;
+
+    background: #fafafa;
+}
+
+
+.result-item h3 {
+    margin-top: 0;
+}
+
+
+.result-text {
+    line-height: 1.6;
+
+    margin-bottom: 12px;
+}
+
+
+.result-meta {
+    font-size: 13px;
+
+    color: #666;
+
+    line-height: 1.6;
+}
+
+
+/* EMPTY MESSAGE */
+
+.empty-message {
+    color: #777;
+
+    text-align: center;
+
+    padding: 20px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 700px) {
+
+    .container {
+        width: 95%;
+    }
+
+
+    .chunk-settings {
+        grid-template-columns: 1fr;
+    }
+
+
+    .uploaded-file {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .search-container {
+        flex-direction: column;
+    }
+
+
+    .processing-grid {
+        grid-template-columns: 1fr;
+    }
+
+}

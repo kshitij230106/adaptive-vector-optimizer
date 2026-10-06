@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Adaptive Vector Optimizer</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <header>
+            <h1>Adaptive Vector Optimizer</h1>
+
+            <p>
+                Upload PDF, Word, PowerPoint, text and Markdown documents,
+                generate embeddings, store them in ChromaDB,
+                and retrieve relevant information using semantic vector search.
+            </p>
+        </header>
+
+
+        <!-- UPLOAD SECTION -->
+        <section class="card">
+
+            <h2>📄 Upload Document</h2>
+
+            <div class="form-group">
+
+                <label for="fileInput">
+                    Select Document
+                </label>
+
+                <input
+                    type="file"
+                    id="fileInput"
+                    accept=".pdf,.docx,.pptx,.txt,.md"
+                >
+
+                <small>
+                    Supported formats:
+                    PDF, DOCX, PPTX, TXT and MD.
+                    Upload one document at a time.
+                </small>
+
+            </div>
+
+
+            <!-- SELECTED FILE -->
+            <div id="selectedFiles" class="selected-files">
+
+                <p class="empty-message">
+                    No file selected.
+                </p>
+
+            </div>
+
+
+            <!-- CHUNK SETTINGS -->
+            <div class="chunk-settings">
+
+                <div class="form-group">
+
+                    <label for="chunkSize">
+                        Chunk Size
+                    </label>
+
+                    <input
+                        type="number"
+                        id="chunkSize"
+                        value="1000"
+                        min="100"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="overlap">
+                        Chunk Overlap
+                    </label>
+
+                    <input
+                        type="number"
+                        id="overlap"
+                        value="100"
+                        min="0"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button id="uploadBtn">
+                Upload and Process
+            </button>
+
+
+            <div id="uploadStatus" class="status">
+                Select a document and click Upload and Process.
+            </div>
+
+        </section>
+
+
+
+        <!-- UPLOADED DOCUMENTS -->
+        <section class="card">
+
+            <h2>📚 Uploaded Documents</h2>
+
+            <div id="uploadedFiles">
+
+                <p class="empty-message">
+                    No documents uploaded yet.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- PROCESSING DETAILS -->
+        <section class="card">
+
+            <h2>📊 Document Processing Details</h2>
+
+            <div id="processingResults">
+
+                <p class="empty-message">
+                    Processing information will appear here after uploading a document.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SEARCH -->
+        <section class="card">
+
+            <h2>🔍 Search Your Documents</h2>
+
+            <div class="search-container">
+
+                <input
+                    type="text"
+                    id="queryInput"
+                    placeholder="Ask something about your uploaded documents..."
+                >
+
+                <button id="searchBtn">
+                    Search
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SEARCH RESULTS -->
+        <section class="card">
+
+            <h2>📚 Retrieved Results</h2>
+
+            <div id="results">
+
+                <p class="empty-message">
+                    Search results will appear here.
+                </p>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
