@@ -5,181 +5,435 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Adaptive Vector Optimizer</title>
+    <title>Adaptive Vector Optimizer — Semantic Document Search</title>
+
+    <meta name="description"
+        content="Upload documents, generate vector embeddings, and perform intelligent semantic search with adaptive chunking, deduplication, and query optimization.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+    <!-- AMBIENT ORB BACKGROUNDS -->
+    <div class="orb orb-1" aria-hidden="true"></div>
+    <div class="orb orb-2" aria-hidden="true"></div>
+    <div class="orb orb-3" aria-hidden="true"></div>
+
     <div class="container">
 
         <!-- HEADER -->
-        <header>
+        <header id="app-header">
+
+            <div class="logo-mark" aria-hidden="true">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="18" stroke="url(#logo-grad)" stroke-width="2.5" opacity="0.8" />
+                    <path d="M14 20 L20 12 L26 20 L20 28Z" fill="url(#logo-grad)" opacity="0.9" />
+                    <circle cx="20" cy="20" r="4" fill="white" opacity="0.95" />
+                    <defs>
+                        <linearGradient id="logo-grad" x1="0" y1="0" x2="40" y2="40">
+                            <stop stop-color="#a78bfa" />
+                            <stop offset="1" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+
             <h1>Adaptive Vector Optimizer</h1>
 
-            <p>
-                Upload PDF, Word, PowerPoint, text and Markdown documents,
-                generate embeddings, store them in ChromaDB,
-                and retrieve relevant information using semantic vector search.
+            <p class="subtitle">
+                Upload documents &middot; Generate embeddings &middot; Semantic search
+                powered by BGE, ChromaDB, and intelligent query optimization.
             </p>
+
         </header>
 
 
-        <!-- UPLOAD SECTION -->
-        <section class="card">
+        <!-- ============================================= -->
+        <!-- UPLOAD SECTION                                -->
+        <!-- ============================================= -->
+        <section class="card" id="upload-section">
 
-            <h2>📄 Upload Document</h2>
+            <div class="card-header">
+                <span class="card-icon">📄</span>
+                <h2>Upload Document</h2>
+            </div>
 
-            <div class="form-group">
+            <!-- File drop zone -->
+            <div class="drop-zone" id="dropZone">
 
-                <label for="fileInput">
-                    Select Document
-                </label>
+                <div class="drop-zone-content">
+                    <div class="drop-icon" aria-hidden="true">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <path
+                                d="M24 4 L24 32 M16 24 L24 32 L32 24"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round" opacity="0.5" />
+                            <path d="M8 36 L8 40 Q8 44 12 44 L36 44 Q40 44 40 40 L40 36" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+                        </svg>
+                    </div>
+
+                    <p class="drop-label">
+                        Drag &amp; drop your file here, or <span class="browse-link">browse</span>
+                    </p>
+
+                    <small class="drop-hint">
+                        PDF, DOCX, PPTX, TXT, MD &mdash; max one file at a time
+                    </small>
+                </div>
 
                 <input
                     type="file"
                     id="fileInput"
-                    accept=".pdf,.docx,.pptx,.txt,.md"
+                    accept=".pdf,.doc,.docx,.pptx,.txt,.md"
+                    hidden
                 >
-
-                <small>
-                    Supported formats:
-                    PDF, DOCX, PPTX, TXT and MD.
-                    Upload one document at a time.
-                </small>
-
             </div>
 
 
-            <!-- SELECTED FILE -->
+            <!-- Selected file preview -->
             <div id="selectedFiles" class="selected-files">
+                <!-- Populated by JS -->
+            </div>
 
-                <p class="empty-message">
-                    No file selected.
-                </p>
+
+            <!-- CHUNKING MODE TOGGLE -->
+            <div class="setting-group">
+
+                <label class="setting-label">Chunking Strategy</label>
+
+                <div class="toggle-group" id="chunkingModeToggle" role="radiogroup"
+                    aria-label="Chunking strategy">
+
+                    <button class="toggle-btn active" data-value="adaptive"
+                        role="radio" aria-checked="true">
+                        <span class="toggle-icon">✨</span> Adaptive
+                    </button>
+
+                    <button class="toggle-btn" data-value="fixed"
+                        role="radio" aria-checked="false">
+                        <span class="toggle-icon">📏</span> Fixed
+                    </button>
+
+                </div>
 
             </div>
 
 
-            <!-- CHUNK SETTINGS -->
-            <div class="chunk-settings">
+            <!-- FIXED CHUNK SETTINGS (hidden when adaptive) -->
+            <div class="chunk-settings" id="fixedChunkSettings" style="display: none;">
 
                 <div class="form-group">
-
-                    <label for="chunkSize">
-                        Chunk Size
-                    </label>
-
+                    <label for="chunkSize">Chunk Size</label>
                     <input
                         type="number"
                         id="chunkSize"
                         value="1000"
                         min="100"
+                        step="50"
                     >
-
+                    <small>Minimum 100 characters per chunk</small>
                 </div>
 
-
                 <div class="form-group">
-
-                    <label for="overlap">
-                        Chunk Overlap
-                    </label>
-
+                    <label for="overlap">Chunk Overlap</label>
                     <input
                         type="number"
                         id="overlap"
                         value="100"
                         min="0"
+                        step="10"
                     >
-
+                    <small>Must be smaller than chunk size</small>
                 </div>
 
             </div>
 
 
-            <button id="uploadBtn">
-                Upload and Process
+            <!-- DEDUP AT INGEST -->
+            <div class="setting-group">
+
+                <div class="switch-row">
+                    <label class="setting-label" for="enableDedup">
+                        Deduplicate Chunks at Ingest
+                    </label>
+                    <label class="switch">
+                        <input type="checkbox" id="enableDedup" checked>
+                        <span class="switch-slider"></span>
+                    </label>
+                </div>
+
+                <small class="setting-hint">
+                    Remove duplicate and near-duplicate chunks before storing
+                </small>
+
+            </div>
+
+
+            <!-- DEDUP THRESHOLD SLIDER -->
+            <div class="setting-group" id="dedupThresholdGroup">
+
+                <label class="setting-label" for="dedupThreshold">
+                    Similarity Threshold
+                    <span class="slider-value" id="dedupThresholdValue">0.95</span>
+                </label>
+
+                <input type="range" id="dedupThreshold"
+                    class="range-slider"
+                    min="0.70" max="1.00" step="0.01" value="0.95">
+
+                <div class="range-labels">
+                    <span>Loose (0.70)</span>
+                    <span>Strict (1.00)</span>
+                </div>
+
+            </div>
+
+
+            <!-- UPLOAD BUTTON -->
+            <button id="uploadBtn" class="btn btn-primary btn-upload">
+                <span class="btn-icon">🚀</span>
+                Upload &amp; Process
             </button>
 
 
-            <div id="uploadStatus" class="status">
-                Select a document and click Upload and Process.
+            <!-- UPLOAD STATUS -->
+            <div id="uploadStatus" class="status-bar">
+                <span class="status-text">
+                    Select a document and click Upload &amp; Process.
+                </span>
             </div>
 
         </section>
 
 
+        <!-- ============================================= -->
+        <!-- UPLOADED DOCUMENTS                            -->
+        <!-- ============================================= -->
+        <section class="card" id="documents-section">
 
-        <!-- UPLOADED DOCUMENTS -->
-        <section class="card">
-
-            <h2>📚 Uploaded Documents</h2>
+            <div class="card-header">
+                <span class="card-icon">📚</span>
+                <h2>Uploaded Documents</h2>
+            </div>
 
             <div id="uploadedFiles">
-
-                <p class="empty-message">
-                    No documents uploaded yet.
-                </p>
-
+                <p class="empty-message">No documents uploaded yet.</p>
             </div>
 
         </section>
 
 
+        <!-- ============================================= -->
+        <!-- PROCESSING DETAILS                            -->
+        <!-- ============================================= -->
+        <section class="card" id="processing-section">
 
-        <!-- PROCESSING DETAILS -->
-        <section class="card">
-
-            <h2>📊 Document Processing Details</h2>
+            <div class="card-header">
+                <span class="card-icon">📊</span>
+                <h2>Processing Details</h2>
+            </div>
 
             <div id="processingResults">
-
                 <p class="empty-message">
                     Processing information will appear here after uploading a document.
                 </p>
-
             </div>
 
         </section>
 
 
+        <!-- ============================================= -->
+        <!-- SEARCH SECTION                                -->
+        <!-- ============================================= -->
+        <section class="card" id="search-section">
 
-        <!-- SEARCH -->
-        <section class="card">
+            <div class="card-header">
+                <span class="card-icon">🔍</span>
+                <h2>Search Your Documents</h2>
+            </div>
 
-            <h2>🔍 Search Your Documents</h2>
 
-            <div class="search-container">
+            <!-- SEARCH BAR -->
+            <div class="search-bar">
 
                 <input
                     type="text"
                     id="queryInput"
                     placeholder="Ask something about your uploaded documents..."
+                    autocomplete="off"
                 >
 
-                <button id="searchBtn">
+                <button id="searchBtn" class="btn btn-primary btn-search">
+                    <span class="btn-icon">🔍</span>
                     Search
                 </button>
 
             </div>
 
+
+            <!-- SEARCH SETTINGS -->
+            <details class="search-settings" id="searchSettings">
+
+                <summary class="settings-toggle">
+                    <span class="settings-icon">⚙️</span>
+                    Advanced Search Settings
+                    <span class="chevron" aria-hidden="true"></span>
+                </summary>
+
+                <div class="settings-body">
+
+                    <!-- SEARCH MODE -->
+                    <div class="setting-group">
+
+                        <label class="setting-label">Search Mode</label>
+
+                        <div class="toggle-group triple" id="searchModeToggle" role="radiogroup"
+                            aria-label="Search mode">
+
+                            <button class="toggle-btn active" data-value="hybrid"
+                                role="radio" aria-checked="true">
+                                <span class="toggle-icon">⚡</span> Hybrid
+                            </button>
+
+                            <button class="toggle-btn" data-value="vector"
+                                role="radio" aria-checked="false">
+                                <span class="toggle-icon">🧠</span> Vector
+                            </button>
+
+                            <button class="toggle-btn" data-value="keyword"
+                                role="radio" aria-checked="false">
+                                <span class="toggle-icon">🔤</span> Keyword
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- HYBRID ALPHA SLIDER -->
+                    <div class="setting-group" id="alphaGroup">
+
+                        <label class="setting-label" for="alphaSlider">
+                            Hybrid Balance
+                            <span class="slider-value" id="alphaValue">0.70</span>
+                        </label>
+
+                        <input type="range" id="alphaSlider"
+                            class="range-slider"
+                            min="0.00" max="1.00" step="0.05" value="0.70">
+
+                        <div class="range-labels">
+                            <span>Keyword ↤</span>
+                            <span>↦ Vector</span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- N RESULTS -->
+                    <div class="setting-group">
+
+                        <label class="setting-label" for="nResults">
+                            Number of Results
+                        </label>
+
+                        <select id="nResults" class="select-input">
+                            <option value="3">3 results</option>
+                            <option value="5" selected>5 results</option>
+                            <option value="10">10 results</option>
+                            <option value="15">15 results</option>
+                            <option value="20">20 results</option>
+                        </select>
+
+                    </div>
+
+
+                    <!-- QUERY OPTIMIZATION -->
+                    <div class="setting-group">
+
+                        <div class="switch-row">
+                            <label class="setting-label" for="optimizeQuery">
+                                Query Optimization
+                            </label>
+                            <label class="switch">
+                                <input type="checkbox" id="optimizeQuery" checked>
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+
+                        <small class="setting-hint">
+                            Expand abbreviations, extract key terms, and generate query variants
+                        </small>
+
+                    </div>
+
+
+                    <!-- RESULT DEDUP -->
+                    <div class="setting-group">
+
+                        <div class="switch-row">
+                            <label class="setting-label" for="deduplicateResults">
+                                Deduplicate Results
+                            </label>
+                            <label class="switch">
+                                <input type="checkbox" id="deduplicateResults" checked>
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+
+                        <small class="setting-hint">
+                            Remove near-duplicate search results for better answer diversity
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </details>
+
         </section>
 
 
+        <!-- ============================================= -->
+        <!-- SEARCH RESULTS                                -->
+        <!-- ============================================= -->
+        <section class="card" id="results-section">
 
-        <!-- SEARCH RESULTS -->
-        <section class="card">
-
-            <h2>📚 Retrieved Results</h2>
+            <div class="card-header">
+                <span class="card-icon">📚</span>
+                <h2>Retrieved Results</h2>
+            </div>
 
             <div id="results">
+                <p class="empty-message">Search results will appear here.</p>
+            </div>
 
-                <p class="empty-message">
-                    Search results will appear here.
-                </p>
+        </section>
 
+
+        <!-- ============================================= -->
+        <!-- CACHE STATS                                   -->
+        <!-- ============================================= -->
+        <section class="card card-compact" id="cache-section">
+
+            <div class="card-header">
+                <span class="card-icon">⚡</span>
+                <h2>Cache</h2>
+                <button id="refreshCacheBtn" class="btn btn-ghost btn-sm" title="Refresh stats">↻</button>
+                <button id="clearCacheBtn" class="btn btn-ghost btn-sm btn-danger-text" title="Clear cache">
+                    Clear
+                </button>
+            </div>
+
+            <div id="cacheStats" class="cache-stats">
+                <p class="empty-message">Cache stats will appear here.</p>
             </div>
 
         </section>

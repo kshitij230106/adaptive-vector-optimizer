@@ -2,5 +2,7 @@ fastapi
 uvicorn
 chromadb
 sentence-transformers
-pypdf
+pymupdf
 python-multipart
+python-docx
+python-pptx
